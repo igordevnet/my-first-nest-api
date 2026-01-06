@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseInt
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
-import { ParamId } from "src/Decorators/param-id.decorator";
+import { ParamId } from "src/shared/Decorators/param-id.decorator";
 
 @Controller(`users`)
 export class UserController {

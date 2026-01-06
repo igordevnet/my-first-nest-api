@@ -1,5 +1,5 @@
 
-import { User } from "src/user/entities/user.entity";
+import { User } from "src/core/user/entities/user.entity";
 import { Message } from "./message";
 
 export interface AuthMessage extends Message {
