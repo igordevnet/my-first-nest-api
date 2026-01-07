@@ -2,12 +2,14 @@ import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { AuthService } from "./auth.service";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { SecurityModule } from "src/security/security.module";
+import { SecurityModule } from "src/shared/security/security.module";
 import { UserModule } from "src/core/user/user.module";
 import { AuthController } from "./auth.controller";
+import { PrismaModule } from "../prisma/prisma.module";
 
 @Module({
   imports: [SecurityModule,
+    PrismaModule,
     UserModule,
     ConfigModule,
     JwtModule.registerAsync({
