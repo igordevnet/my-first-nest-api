@@ -10,6 +10,7 @@ import { LoginUserDTO } from "src/core/user/dto/login-user.dto";
 import { UserService } from "src/core/user/user.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { Message } from "../messages/message";
+import { ResetPasswordDTO } from "src/core/user/dto/resetPassword-user.dto";
 
 @Injectable()
 export class AuthService {
@@ -27,14 +28,14 @@ export class AuthService {
 
     const token = await this.generateToken(String(user.id_user));
 
-    return { message: "Login sucessful", token, user };
+    return { message: "Login sucessful.", token, user };
 
   }
 
-  async forgotPassword(dto): Promise<Message>{
+  async forgotPassword(email: string): Promise<Message>{
     const user = await this.prismaService.user.findUnique({
       where: {
-        email: dto.email
+        email
       }
     });
 
@@ -42,6 +43,10 @@ export class AuthService {
       throw new NotFoundException('This email does not exist.');
     }
 
+    return { message: 'Email sent successfully.'}
+  }
+
+  async resetPassword(dto: ResetPasswordDTO): Promise<Message> {
     const hashPassword = await this.securityService.hashPassword(dto.password);
 
     await this.prismaService.user.update({
@@ -66,5 +71,5 @@ export class AuthService {
     } catch {
       throw new BadRequestException("Please log in again.");
     }
-  }
+  }  
 }

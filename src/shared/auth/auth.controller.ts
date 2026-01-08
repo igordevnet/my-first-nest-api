@@ -1,8 +1,8 @@
 import { Controller, Post, Body, Patch } from '@nestjs/common';
 import { AuthMessage } from 'src/shared/messages/auth-message';
+import { Message } from '../messages/message';
 import { LoginUserDTO } from 'src/core/user/dto/login-user.dto';
 import { AuthService } from './auth.service';
-import { ForgotPasswordDTO } from 'src/core/user/dto/forgotPassword-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,7 +14,7 @@ export class AuthController {
     }
 
     @Patch('forgot')
-    async forgotPassword(@Body() dto: ForgotPasswordDTO){
-        return this.authService.forgotPassword(dto);
+    async forgotPassword(@Body('email') email): Promise<Message> {
+        return this.authService.forgotPassword(email);
     }
 }
