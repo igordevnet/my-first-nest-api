@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
@@ -28,7 +28,6 @@ export class UserController {
     }
 
     @Patch(':id')
-    @UseGuards(AuthGuard)
     async update(@Param('id', ParseIntPipe) id, @Body() updateUserDTO: UpdateUserDTO) {
 
         console.log('BODY:', updateUserDTO);
@@ -36,7 +35,6 @@ export class UserController {
     }
 
     @Delete(':id')
-    @UseGuards(AuthGuard)
     async delete(@Param('id', ParseIntPipe) id) {
         return this.userService.delete(id);
     }

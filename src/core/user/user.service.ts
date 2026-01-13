@@ -12,7 +12,7 @@ export class UserService {
 
     async create({ email, name, password }: CreateUserDTO) {
         password = await this.securityService.hashPassword(password);
-        
+
         return this.prisma.user.create({
             data: {
                 name_user: name,
@@ -29,7 +29,7 @@ export class UserService {
             }
         });
 
-        if (!user){
+        if (!user) {
             throw new BadRequestException(`This email does not exist.`);
         }
 
@@ -46,13 +46,20 @@ export class UserService {
         return this.prisma.user.findUnique({
             where: {
                 id_user: id
-            }
+            },
+            select: {
+                id_user: true,
+                name_user: true,
+                email: true,
+                created_at: true,
+                updated_at: true
+            },
         })
     }
 
     async update(id: number, { email, name, password }: UpdateUserDTO) {
-         await this.exists(id);
-        
+        await this.exists(id);
+
         return this.prisma.user.update({
             data: {
                 name_user: name,
@@ -66,7 +73,7 @@ export class UserService {
     }
 
     async delete(id: number) {
-         await this.exists(id);
+        await this.exists(id);
 
         return this.prisma.user.delete({
             where: {
@@ -80,7 +87,7 @@ export class UserService {
             where: {
                 id_user: id
             }
-        }))){
+        }))) {
             throw new NotFoundException(`User ${id} does not exit.`)
         }
     }

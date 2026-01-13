@@ -4,6 +4,7 @@ import { Message } from '../messages/message';
 import { LoginUserDTO } from 'src/core/user/dto/login-user.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guards/auth.guard';
+import { User } from '../Decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -25,4 +26,9 @@ export class AuthController {
         return this.authService.decodeToken(token);
     }
 
+    @Get('user')
+    @UseGuards(AuthGuard)
+    async getUserByToken(@User() user){
+        return user;
+    }
 }

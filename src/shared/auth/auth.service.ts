@@ -11,6 +11,7 @@ import { UserService } from "src/core/user/user.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { Message } from "../messages/message";
 import { ResetPasswordDTO } from "src/core/user/dto/resetPassword-user.dto";
+import { User } from "../Decorators/user.decorator";
 
 @Injectable()
 export class AuthService {
@@ -72,4 +73,8 @@ export class AuthService {
       throw new BadRequestException("Please log in again.");
     }
   }  
+
+  public async getUserByToken(@User() user){
+    return user;
+  }
 }

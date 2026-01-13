@@ -1,9 +1,10 @@
-import { MiddlewareConsumer, Module, NestModule, Req, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, Req, RequestMethod, forwardRef } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { PrismaModule } from 'src/shared/prisma/prisma.module';
 import { UserIdCheckMiddleware } from 'src/shared/middlewares/user-id-check.middleware';
 import { SecurityModule } from 'src/shared/security/security.module';
+
 
 @Module({
     imports: [PrismaModule, SecurityModule],
