@@ -10,14 +10,15 @@ export class UserService {
 
     constructor(private readonly prisma: PrismaService, private readonly securityService: SecurityService) { }
 
-    async create({ email, name, password }: CreateUserDTO) {
+    async create({ email, name, password, role }: CreateUserDTO) {
         password = await this.securityService.hashPassword(password);
 
         return this.prisma.user.create({
             data: {
                 name_user: name,
                 email,
-                password
+                password,
+                role
             },
         });
     }
@@ -51,6 +52,7 @@ export class UserService {
                 id_user: true,
                 name_user: true,
                 email: true,
+                role: true,
                 created_at: true,
                 updated_at: true
             },

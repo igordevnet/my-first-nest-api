@@ -4,10 +4,11 @@ import { UserService } from './user.service';
 import { PrismaModule } from 'src/shared/prisma/prisma.module';
 import { UserIdCheckMiddleware } from 'src/shared/middlewares/user-id-check.middleware';
 import { SecurityModule } from 'src/shared/security/security.module';
+import { AuthModule } from 'src/shared/auth/auth.module';
 
 
 @Module({
-    imports: [PrismaModule, SecurityModule],
+    imports: [PrismaModule, SecurityModule, AuthModule],
     controllers: [UserController],
     providers: [UserService],
     exports: [UserService],

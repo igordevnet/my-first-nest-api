@@ -5,6 +5,9 @@ import { LoginUserDTO } from 'src/core/user/dto/login-user.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { User } from '../Decorators/user.decorator';
+import { Roles } from '../Decorators/role.decorator';
+import { Role } from '../enums/role.enum';
+import { RoleGuard } from './guards/role.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -20,15 +23,18 @@ export class AuthController {
         return this.authService.forgotPassword(email);
     }
 
+    @UseGuards(AuthGuard, RoleGuard)
+    @Roles(Role.Admin)
     @Get('token')
     @UseGuards(AuthGuard)
     async testToken(@Headers('token') token): Promise<String> {
         return this.authService.decodeToken(token);
     }
 
+    @UseGuards(AuthGuard, RoleGuard)
+    @Roles(Role.Admin)
     @Get('user')
-    @UseGuards(AuthGuard)
-    async getUserByToken(@User() user){
+    async getUserByToken(@User() user) {
         return user;
     }
 }

@@ -35,6 +35,7 @@ export class UserController {
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard)
     async delete(@Param('id', ParseIntPipe) id) {
         return this.userService.delete(id);
     }
