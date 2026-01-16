@@ -5,10 +5,11 @@ import { PrismaModule } from 'src/shared/prisma/prisma.module';
 import { UserIdCheckMiddleware } from 'src/shared/middlewares/user-id-check.middleware';
 import { SecurityModule } from 'src/shared/security/security.module';
 import { AuthModule } from 'src/shared/auth/auth.module';
+import { FileModule } from 'src/shared/file/file.module';
 
 
 @Module({
-    imports: [PrismaModule, SecurityModule, AuthModule],
+    imports: [PrismaModule, SecurityModule, AuthModule, FileModule],
     controllers: [UserController],
     providers: [UserService],
     exports: [UserService],
@@ -18,6 +19,7 @@ export class UserModule implements NestModule {
         consumer.apply(UserIdCheckMiddleware).exclude(
             { path: 'users/login', method: RequestMethod.ALL },
             { path: 'users/register', method: RequestMethod.ALL },
+            { path: 'users/photo', method: RequestMethod.ALL },
         ).forRoutes({
             path: 'users/:id',
             method: RequestMethod.ALL

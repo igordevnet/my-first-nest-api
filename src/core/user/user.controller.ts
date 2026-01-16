@@ -1,14 +1,16 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
 import { ParamId } from "src/shared/Decorators/param-id.decorator";
 import { AuthGuard } from "src/shared/auth/guards/auth.guard";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { User } from "src/shared/Decorators/user.decorator";
 
 @Controller(`users`)
 export class UserController {
 
-    constructor(private readonly userService: UserService) {}
+    constructor(private readonly userService: UserService) { }
 
     @Post()
     async create(@Body() createUserDTO: CreateUserDTO) {
@@ -22,7 +24,7 @@ export class UserController {
 
     @Get(':id')
     async readOne(@ParamId() id: number) {
-        console.log({id})
+        console.log({ id })
 
         return this.userService.getUser(id);
     }
@@ -38,5 +40,12 @@ export class UserController {
     @UseGuards(AuthGuard)
     async delete(@Param('id', ParseIntPipe) id) {
         return this.userService.delete(id);
+    }
+
+    @Post('photo')
+    @UseGuards(AuthGuard)
+    @UseInterceptors(FileInterceptor('file'))
+    async uploadPhoto(@User() user, @UploadedFile() file: Express.Multer.File) {
+        return this.userService.uploadPhoto(user.id_user, file);
     }
 }

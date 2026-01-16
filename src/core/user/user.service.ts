@@ -4,11 +4,18 @@ import { PrismaService } from "src/shared/prisma/prisma.service";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { SecurityService } from "src/shared/security/security.service";
+import { FileService } from "src/shared/file/file.service";
+import { join } from "path";
+import { mkdir } from "fs/promises";
+
 
 @Injectable()
 export class UserService {
 
-    constructor(private readonly prisma: PrismaService, private readonly securityService: SecurityService) { }
+    constructor(private readonly prisma: PrismaService,
+        private readonly securityService: SecurityService,
+        private readonly fileService: FileService
+    ) { }
 
     async create({ email, name, password, role }: CreateUserDTO) {
         password = await this.securityService.hashPassword(password);
@@ -92,5 +99,21 @@ export class UserService {
         }))) {
             throw new NotFoundException(`User ${id} does not exit.`)
         }
+    }
+
+    async uploadPhoto(userId: number, file: Express.Multer.File) {
+        const uploadDir = join(process.cwd(), 'storage', 'photos');
+
+        await mkdir(uploadDir, { recursive: true });
+
+        const filePath = join(uploadDir, `photo-${userId}.jpg`);
+
+        try{
+            return this.fileService.uploadPhoto(file, filePath)
+        }
+        catch (e){
+            throw new BadRequestException(e)
+        }
+
     }
 }
