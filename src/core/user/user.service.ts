@@ -108,11 +108,24 @@ export class UserService {
 
         const filePath = join(uploadDir, `photo-${userId}.jpg`);
 
-        try{
+        try {
             return this.fileService.uploadPhoto(file, filePath)
         }
-        catch (e){
+        catch (e) {
             throw new BadRequestException(e)
+        }
+
+    }
+
+    async uploadFiles(userId: number, files: { documents: Express.Multer.File[] }) {
+        const uploadDir = join(process.cwd(), 'storage', 'photos');
+
+
+        try {
+            return await this.fileService.uploadDocuments(files.documents, uploadDir);
+        }
+        catch (e) {
+            throw new BadRequestException(e);
         }
 
     }

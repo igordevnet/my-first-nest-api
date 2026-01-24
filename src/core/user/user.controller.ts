@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
 import { ParamId } from "src/shared/Decorators/param-id.decorator";
 import { AuthGuard } from "src/shared/auth/guards/auth.guard";
-import { FileInterceptor } from "@nestjs/platform-express";
+import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import { User } from "src/shared/Decorators/user.decorator";
 
 @Controller(`users`)
@@ -47,5 +47,17 @@ export class UserController {
     @UseInterceptors(FileInterceptor('file'))
     async uploadPhoto(@User() user, @UploadedFile() file: Express.Multer.File) {
         return this.userService.uploadPhoto(user.id_user, file);
+    }
+
+    @Post('files-fields')
+    @UseGuards(AuthGuard)
+    @UseInterceptors(FileFieldsInterceptor([{ 
+        name: 'documents',
+        maxCount: 10,
+    }]))
+    async uploadFiles(@User() user, @UploadedFiles() files: { documents: Express.Multer.File[]}) {
+        console.log(files)
+        
+        return this.userService.uploadFiles(user.id_user, files);
     }
 }

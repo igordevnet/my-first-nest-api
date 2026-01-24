@@ -20,6 +20,7 @@ export class UserModule implements NestModule {
             { path: 'users/login', method: RequestMethod.ALL },
             { path: 'users/register', method: RequestMethod.ALL },
             { path: 'users/photo', method: RequestMethod.ALL },
+            { path: 'users/files-fields', method: RequestMethod.ALL }
         ).forRoutes({
             path: 'users/:id',
             method: RequestMethod.ALL
