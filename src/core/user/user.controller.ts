@@ -5,7 +5,7 @@ import { UserService } from "./user.service";
 import { ParamId } from "src/shared/Decorators/param-id.decorator";
 import { AuthGuard } from "src/shared/auth/guards/auth.guard";
 import { FileFieldsInterceptor, FileInterceptor } from "@nestjs/platform-express";
-import { User } from "src/shared/Decorators/user.decorator";
+import { UserDecorator } from "src/shared/Decorators/user.decorator";
 
 @Controller(`users`)
 export class UserController {
@@ -22,7 +22,7 @@ export class UserController {
         return this.userService.list();
     }
 
-    @Get(':id')
+    /*@Get(':id')
     async readOne(@ParamId() id: number) {
         console.log({ id })
 
@@ -47,7 +47,7 @@ export class UserController {
     @UseGuards(AuthGuard)
     @UseInterceptors(FileInterceptor('file'))
     async uploadPhoto(
-        @User() user,
+        @UserDecorator() user,
         @UploadedFile(new ParseFilePipe({
             validators: [new MaxFileSizeValidator({maxSize: 1024 * 300})]
         })) file: Express.Multer.File,
@@ -70,9 +70,9 @@ export class UserController {
         name: 'documents',
         maxCount: 10,
     }]))
-    async uploadFiles(@User() user, @UploadedFiles() files: { documents: Express.Multer.File[] }) {
+    async uploadFiles(@UserDecorator() user, @UploadedFiles() files: { documents: Express.Multer.File[] }) {
         console.log(files)
 
         return this.userService.uploadFiles(user.id_user, files);
-    }
+    }*/
 }

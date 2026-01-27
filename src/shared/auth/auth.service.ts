@@ -8,18 +8,21 @@ import { SecurityService } from "src/shared/security/security.service";
 import { AuthMessage } from "src/shared/messages/auth-message";
 import { LoginUserDTO } from "src/core/user/dto/login-user.dto";
 import { UserService } from "src/core/user/user.service";
-import { PrismaService } from "../prisma/prisma.service";
 import { Message } from "../messages/message";
 import { ResetPasswordDTO } from "src/core/user/dto/resetPassword-user.dto";
-import { User } from "../Decorators/user.decorator";
+import { Repository } from "typeorm";
+import { User } from "src/core/user/entities/user.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { UserDecorator } from "../Decorators/user.decorator";
 
 @Injectable()
 export class AuthService {
   public constructor(
     private readonly jwtService: JwtService,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly userService: UserService,
     private readonly securityService: SecurityService,
-    private readonly prismaService: PrismaService
   ) { }
 
   async login(loginUserDto: LoginUserDTO): Promise<AuthMessage> {
@@ -33,7 +36,7 @@ export class AuthService {
 
   }
 
-  async forgotPassword(email: string): Promise<Message>{
+  /*async forgotPassword(email: string): Promise<Message>{
     const user = await this.prismaService.user.findUnique({
       where: {
         email
@@ -60,9 +63,11 @@ export class AuthService {
     })
 
     return { message: 'Password changed successfully.'}
-  }
+  }*/
 
   public generateToken(payload: string): Promise<string> {
+    console.log('JWT_SECRET:', process.env.JWT_SECRET);
+
     return this.jwtService.signAsync(payload);
   }
 
@@ -74,7 +79,7 @@ export class AuthService {
     }
   }  
 
-  public async getUserByToken(@User() user){
+  public async getUserByToken(@UserDecorator() user){
     return user;
   }
 }

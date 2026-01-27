@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
             throw new ForbiddenException('Invalid token.');
         }
 
-        request.user = await this.userService.getUser(Number(payload));
+        //request.user = await this.userService.getUser(Number(payload));
          
         return true;
     }

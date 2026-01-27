@@ -4,7 +4,7 @@ import { Message } from '../messages/message';
 import { LoginUserDTO } from 'src/core/user/dto/login-user.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guards/auth.guard';
-import { User } from '../Decorators/user.decorator';
+import { UserDecorator } from '../Decorators/user.decorator';
 import { Roles } from '../Decorators/role.decorator';
 import { Role } from '../enums/role.enum';
 import { RoleGuard } from './guards/role.guard';
@@ -17,7 +17,7 @@ export class AuthController {
     async login(@Body() dto: LoginUserDTO): Promise<AuthMessage> {
         return this.authService.login(dto);
     }
-
+/*
     @Patch('forgot')
     async forgotPassword(@Body('email') email): Promise<Message> {
         return this.authService.forgotPassword(email);
@@ -34,7 +34,7 @@ export class AuthController {
     @UseGuards(AuthGuard, RoleGuard)
     @Roles(Role.Admin)
     @Get('user')
-    async getUserByToken(@User() user) {
+    async getUserByToken(@UserDecorator() user) {
         return user;
-    }
+    }*/
 }

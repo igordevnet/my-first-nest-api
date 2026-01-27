@@ -1,37 +1,33 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDTO } from "./dto/create-user.dto";
-import { PrismaService } from "src/shared/prisma/prisma.service";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { SecurityService } from "src/shared/security/security.service";
 import { FileService } from "src/shared/file/file.service";
 import { join } from "path";
 import { mkdir } from "fs/promises";
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
 
 
 @Injectable()
 export class UserService {
 
-    constructor(private readonly prisma: PrismaService,
+    constructor(
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
         private readonly securityService: SecurityService,
         private readonly fileService: FileService
     ) { }
 
-    async create({ email, name, password, role }: CreateUserDTO) {
-        password = await this.securityService.hashPassword(password);
-
-        return this.prisma.user.create({
-            data: {
-                name_user: name,
-                email,
-                password,
-                role
-            },
-        });
+    async create(createUserDto: CreateUserDTO) {
+        createUserDto.password = await this.securityService.hashPassword(createUserDto.password);
+        const createdUser = await this.userRepository.create(createUserDto);
+        return this.userRepository.save(createdUser);
     }
 
     async findByEmail(email: string): Promise<User> {
-        const user = await this.prisma.user.findUnique({
+        const user = await this.userRepository.findOne({
             where: {
                 email
             }
@@ -45,10 +41,10 @@ export class UserService {
     }
 
     async list() {
-        return this.prisma.user.findMany();
+        return this.userRepository.find();
     }
 
-    async getUser(id: number) {
+   /* async getUser(id: number) {
         await this.exists(id);
 
         return this.prisma.user.findUnique({
@@ -128,5 +124,5 @@ export class UserService {
             throw new BadRequestException(e);
         }
 
-    }
+    }*/
 }

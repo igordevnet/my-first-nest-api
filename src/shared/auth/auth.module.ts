@@ -5,11 +5,12 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { SecurityModule } from "src/shared/security/security.module";
 import { UserModule } from "src/core/user/user.module";
 import { AuthController } from "./auth.controller";
-import { PrismaModule } from "../prisma/prisma.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { User } from "src/core/user/entities/user.entity";
 
 @Module({
   imports: [SecurityModule,
-    PrismaModule,
+    TypeOrmModule.forFeature([User]),
     forwardRef(() => UserModule),
     ConfigModule,
     JwtModule.registerAsync({

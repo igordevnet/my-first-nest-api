@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext, NotFoundException } from "@nestjs/common";
 
-export const User = createParamDecorator((_data: unknown, context: ExecutionContext) => {
+export const UserDecorator = createParamDecorator((_data: unknown, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
 
     if (!request.user) {
