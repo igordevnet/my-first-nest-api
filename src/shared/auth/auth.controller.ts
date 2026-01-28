@@ -8,6 +8,7 @@ import { UserDecorator } from '../Decorators/user.decorator';
 import { Roles } from '../Decorators/role.decorator';
 import { Role } from '../enums/role.enum';
 import { RoleGuard } from './guards/role.guard';
+import { ResetPasswordDTO } from 'src/core/user/dto/resetPassword-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,6 +18,12 @@ export class AuthController {
     async login(@Body() dto: LoginUserDTO): Promise<AuthMessage> {
         return this.authService.login(dto);
     }
+
+    @Patch('reset')
+    async resetPassword(@Body() dto: ResetPasswordDTO): Promise<Message> {
+        return this.authService.resetPassword(dto);
+    }
+
 /*
     @Patch('forgot')
     async forgotPassword(@Body('email') email): Promise<Message> {

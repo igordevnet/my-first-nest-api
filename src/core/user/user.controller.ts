@@ -22,7 +22,7 @@ export class UserController {
         return this.userService.list();
     }
 
-    /*@Get(':id')
+    @Get(':id')
     async readOne(@ParamId() id: number) {
         console.log({ id })
 
@@ -74,5 +74,5 @@ export class UserController {
         console.log(files)
 
         return this.userService.uploadFiles(user.id_user, files);
-    }*/
+    }
 }

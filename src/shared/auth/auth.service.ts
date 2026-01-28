@@ -36,34 +36,29 @@ export class AuthService {
 
   }
 
-  /*async forgotPassword(email: string): Promise<Message>{
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        email
-      }
-    });
+  async forgotPassword(email: string): Promise<Message> {
+    const user = await this.userService.findByEmail(email);
 
-    if(!user){
+    if (!user) {
       throw new NotFoundException('This email does not exist.');
     }
 
-    return { message: 'Email sent successfully.'}
+    return { message: 'Email sent successfully.' }
   }
 
   async resetPassword(dto: ResetPasswordDTO): Promise<Message> {
-    const hashPassword = await this.securityService.hashPassword(dto.password);
+    const hashedPassword = await this.securityService.hashPassword(dto.password);
 
-    await this.prismaService.user.update({
-      data: {
-        password: hashPassword
-      },
-      where: {
-        email: dto.email
+    await this.userRepository.update(
+      { email: dto.email },
+      { 
+        password: hashedPassword, 
+        updated_at: new Date()
       }
-    })
+    )
 
-    return { message: 'Password changed successfully.'}
-  }*/
+    return { message: 'Password changed successfully.' }
+  }
 
   public generateToken(payload: string): Promise<string> {
     console.log('JWT_SECRET:', process.env.JWT_SECRET);
@@ -77,9 +72,9 @@ export class AuthService {
     } catch {
       throw new BadRequestException("Please log in again.");
     }
-  }  
+  }
 
-  public async getUserByToken(@UserDecorator() user){
+  public async getUserByToken(@UserDecorator() user) {
     return user;
   }
 }

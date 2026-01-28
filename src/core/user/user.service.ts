@@ -44,10 +44,10 @@ export class UserService {
         return this.userRepository.find();
     }
 
-   /* async getUser(id: number) {
+    async getUser(id: number) {
         await this.exists(id);
 
-        return this.prisma.user.findUnique({
+        return this.userRepository.findOne({
             where: {
                 id_user: id
             },
@@ -65,35 +65,33 @@ export class UserService {
     async update(id: number, { email, name, password }: UpdateUserDTO) {
         await this.exists(id);
 
-        return this.prisma.user.update({
-            data: {
+        if (password) {
+            password = await this.securityService.hashPassword(password);
+        }
+
+        return this.userRepository.update(
+            { id_user: id },
+            {
                 name_user: name,
                 email,
-                password
+                password,
             },
-            where: {
-                id_user: id
-            }
-        })
+        );
     }
 
     async delete(id: number) {
         await this.exists(id);
 
-        return this.prisma.user.delete({
-            where: {
-                id_user: id
-            }
-        })
+        return this.userRepository.delete({ id_user: id });
     }
 
     async exists(id: number) {
-        if (!(await this.prisma.user.count({
-            where: {
-                id_user: id
-            }
-        }))) {
-            throw new NotFoundException(`User ${id} does not exit.`)
+        const exists = await this.userRepository.exists({
+            where: { id_user: id },
+        });
+
+        if (!exists) {
+            throw new NotFoundException(`User ${id} does not exist.`);
         }
     }
 
@@ -124,5 +122,5 @@ export class UserService {
             throw new BadRequestException(e);
         }
 
-    }*/
+    }
 }
