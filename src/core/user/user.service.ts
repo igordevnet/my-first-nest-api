@@ -2,12 +2,12 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
-import { SecurityService } from "src/shared/security/security.service";
-import { FileService } from "src/shared/file/file.service";
+import { FileService } from "../../shared/file/file.service";
 import { join } from "path";
 import { mkdir } from "fs/promises";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { SecurityService } from "../../shared/security/security.service";
 
 
 @Injectable()

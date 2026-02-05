@@ -1,7 +1,7 @@
-import { Role } from "src/shared/enums/role.enum";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, Timestamp } from "typeorm";
+import { Role } from "../../../shared/enums/role.enum";
 
-@Entity({name: 'user'})
+@Entity({ name: 'user' })
 export class User {
     @PrimaryGeneratedColumn()
     id_user?: number;
